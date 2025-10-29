@@ -58,6 +58,7 @@ void Game::Render()
     SDL_SetRenderDrawColor(m_renderer,255,0,0,255);
     SDL_RenderFillRect(m_renderer,&m_apple);
 
+
     SDL_RenderPresent(m_renderer);
     SDL_Delay(25);
 }
@@ -155,7 +156,7 @@ void Game::Update(float)
     // Yılanın eski head pozisyonunu kaydet
     snake_body.push_front(head);
     
-    // Eğer yılan elmayı yemişse boyutu artır, yoksa kuyruğu kısalt
+    // Eğer yılan elmayı yemişse boyutu artır
     if (snake_body.size() > m_size) {
         snake_body.pop_back();
     }
@@ -179,15 +180,31 @@ void Game::Update(float)
     // Elma ile çarpışma kontrolü
     if (collisionhandler.CheckCollision(head, m_apple))
     {
-        m_size += 2;
+        m_size += 5;
         std::cout << "snake size: " << m_size << std::endl;
         
         // Yeni elma pozisyonu oluştur
         m_apple = {(rand() % 100) * 10, (rand() % 100) * 10, 10, 10};
     }
-    // if (collisionhandler.CheckCollision(head,))
-    // {
-    //     /* code */
-    // }
+    if (m_size > 1)
+    {
+        for (size_t i = 2; i < snake_body.size(); i++)
+        {
+            if (collisionhandler.CheckCollision(head,snake_body[i]))
+            {
+                m_size = 1 ;
+                snake_body.clear();
+                snake_body.emplace_back(head);
+                std::cout << "Oyunu kaybettiniz" << std::endl;
+            }   
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     
 }
